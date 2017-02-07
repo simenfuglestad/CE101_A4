@@ -24,7 +24,7 @@ def format_web_string(string):
 
 def get_string_from_url(url):
     website = urllib2.urlopen(url).read()
-    soup = BeautifulSoup(website, "lxml")
+    soup = BeautifulSoup(website, "html5lib")
     string = ""
     for p in soup.findAll('p'):
         if "twite" not in str(p) and "promo" not in str(p):
