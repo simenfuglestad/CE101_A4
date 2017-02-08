@@ -3,6 +3,10 @@ from bs4 import BeautifulSoup
 
 
 def format_web_string(string):
+    """
+    Format and return a string to remove <p> tags
+    string -- html tree to be formated
+    """
     cache = ""
     found_tag = False
     for c in string:
@@ -23,6 +27,11 @@ def format_web_string(string):
 
 
 def get_string_from_url(url):
+    """
+    Collect a url, extract an article from it, format the article to
+    human-readble string and return it.
+    url -- url to collect and extract data from
+    """
     website = urllib2.urlopen(url).read()
     soup = BeautifulSoup(website, "html5lib")
     string = ""
@@ -34,5 +43,23 @@ def get_string_from_url(url):
     string = title + string
     return string
 
-print format_web_string(get_string_from_url(
-        "http://www.bbc.co.uk/news/uk-england-leeds-38767596"))
+articles = []  # Store links to articls here
+
+
+def fetch_articles(url, num_of_articles=5):
+    """
+    Retrieve an amount of urls directing to top stories from the site
+    url -- website to collect from
+    num_of_articles -- how many urls to collect
+    """
+
+    website = urllib2.urlopen(url).read()
+    soup = BeautifulSoup(website, "html5lib")
+
+    for c in soup.findAll("a", {"class": "top-story"}):
+        if len(articles) < num_of_articles:
+            articles.append(c['href'])
+
+# Example usage below
+# fetch_articles("http://www.bbc.co.uk")
+# print format_web_string(get_string_from_url(articles[0]))
