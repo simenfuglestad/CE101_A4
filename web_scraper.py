@@ -26,6 +26,9 @@ def format_web_string(string):
     return string
 
 
+articles = []
+titles = []
+
 def get_string_from_url(url):
     """
     Collect a url, extract an article from it, format the article to
@@ -38,12 +41,15 @@ def get_string_from_url(url):
     for p in soup.findAll('p'):
         if "twite" not in str(p) and "promo" not in str(p):
             string = string + str(p) + '\n'
-    title = str(soup.findAll("title"))
-    title = title[1:len(title) - 1]
-    string = title + string
+    title = str(soup.find("title"))
+    title = title.replace(" - BBC News", "")
+    titles.append(format_web_string(title))
+    articles.append(format_web_string(string))
     return string
 
-articles = []  # Store links to articls here
+
+
+article_refs = []  # Store links to articls here
 
 
 def fetch_articles(url, num_of_articles=5):
@@ -57,9 +63,10 @@ def fetch_articles(url, num_of_articles=5):
     soup = BeautifulSoup(website, "html5lib")
 
     for c in soup.findAll("a", {"class": "top-story"}):
-        if len(articles) < num_of_articles:
-            articles.append(c['href'])
+        if len(article_refs) < num_of_articles:
+            article_refs.append(c['href'])
 
 # Example usage below
 # fetch_articles("http://www.bbc.co.uk")
-# print format_web_string(get_string_from_url(articles[0]))
+# print format_web_string(get_string_from_url(article_refs[1]))
+
