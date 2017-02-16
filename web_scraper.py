@@ -25,7 +25,6 @@ def format_web_string(string):
             cache = ""
     return string
 
-
 def get_string_from_url(url):
     """
     Collect a url, extract an article from it, format the article to
@@ -41,6 +40,7 @@ def get_string_from_url(url):
     title = str(soup.findAll("title"))
     title = title[1:len(title) - 1]
     string = title + string
+    string = string.replace(" -", "")
     return string
 
 articles = []  # Store links to articls here
@@ -61,5 +61,5 @@ def fetch_articles(url, num_of_articles=5):
             articles.append(c['href'])
 
 # Example usage below
-# fetch_articles("http://www.bbc.co.uk")
-# print format_web_string(get_string_from_url(articles[0]))
+fetch_articles("http://www.bbc.co.uk")
+print format_web_string(get_string_from_url(articles[0]))
